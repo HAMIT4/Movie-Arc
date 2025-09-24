@@ -8,4 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#BAFF0000</color>
+    <color name="grey">#CD9E9E9E</color>
+    <color name="dark_grey">#BA090909</color>"
+
+<!--    colors for chip background-->
+    <color name="chip_bg">#F5F5F5</color>   <!-- light gray background -->
+    <color name="chip_border">#DDDDDD</color>
+    <color name="chip_text">#F5333333</color>
+
+
+
 </resources>

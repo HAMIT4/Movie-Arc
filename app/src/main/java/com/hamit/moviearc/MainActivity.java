@@ -1,6 +1,7 @@
 package com.hamit.moviearc;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.hamit.moviearc.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding= ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        
+        title= findViewById(R.id.titleTextView);
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -42,5 +46,24 @@ public class MainActivity extends AppCompatActivity {
         NavController navController= Navigation.findNavController(this, R.id.fragmentContainerView2);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
+
+        // setup a title change on navigation change
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            updateTitle(destination.getId());
+        });
     }
+
+    private void updateTitle(int id) {
+        if (id == R.id.nav_home){
+            title.setText("Movie Arc");
+        } else if (id ==R.id.nav_search) {
+            title.setText("Discover");
+        } else if (id == R.id.nav_categories) {
+            title.setText("Categories");
+        } else if (id == R.id.nav_profile) {
+            title.setText("Profile");
+        }
+    }
+
+
 }

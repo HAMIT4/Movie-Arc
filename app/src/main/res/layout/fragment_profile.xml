@@ -1,13 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".Fragments.ProfileFragment.ProfileFragment">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/relativeLayout4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/stLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/settings_com" />
+
+        <TextView
+            style="@style/TitleHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/stLogo"
+            android:text="@string/settings" />
+
+    </RelativeLayout>
+
+<!--    we might need to scroll this view when more features are added-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--            user Account-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/light_dark_bg"
+                android:elevation="5dp">
+
+                <ImageView
+                    android:id="@+id/avatar_image"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/avatar_default"/>
+                <LinearLayout
+                    android:id="@+id/accountInfo"
+                    android:layout_toEndOf="@id/avatar_image"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextHeading"
+                        android:text="@string/john_doe"/>
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/john_doe_email_com"/>
+
+                    <TextView
+                        android:id="@+id/memberType"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Community Member"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:textAlignment="center"
+                    android:padding="8dp"
+                    android:background="@drawable/outline_bg"/>
+            </RelativeLayout>
+
+<!--            Appearance Settings-->
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/light_dark_bg"
+                android:elevation="5dp">
+
+                <LinearLayout
+                    android:id="@+id/txt_tt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/appearance_com"/>
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextHeading"
+                        android:text="Appearance"/>
+
+                </LinearLayout>
+<!--                dark theme selection-->
+                <RelativeLayout
+                    android:layout_below="@id/txt_tt"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/ngt"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/night_com"/>
+
+                    <LinearLayout
+                        android:id="@+id/dt"
+                        android:layout_toEndOf="@id/ngt"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextHeading"
+                            android:text="@string/dark_theme"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/darkC"/>
+
+                    </LinearLayout>
+<!--                    switch to light theme-->
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/darkModeSwitch"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/dt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:thumbTint="@android:color/white"
+                        app:trackTint="@android:color/holo_red_dark"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+<!--            notifications-->
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/light_dark_bg"
+                android:elevation="5dp">
+
+                <LinearLayout
+                    android:id="@+id/txt_nf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/bell_red_com"/>
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextHeading"
+                        android:text="@string/notifications"/>
+
+                </LinearLayout>
+                <!--                notification selection-->
+                <RelativeLayout
+                    android:id="@+id/notf_section"
+                    android:layout_below="@id/txt_nf"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/bell_ic"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/bell_com"/>
+
+                    <LinearLayout
+                        android:id="@+id/nf"
+                        android:layout_toEndOf="@id/bell_ic"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextHeading"
+                            android:text="@string/push_notifications"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/push_notify"/>
+
+                    </LinearLayout>
+                    <!--                    switch to light theme-->
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/notificationModeSwitch"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/nf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:thumbTint="@android:color/white"
+                        app:trackTint="@android:color/holo_red_dark"/>
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_below="@id/notf_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/grey"/>
+
+<!--                notification settings-->
+                <RelativeLayout
+                    android:id="@+id/notif_settings"
+                    android:layout_below="@id/view"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:id="@+id/right"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/right_com"/>
+
+                    <LinearLayout
+                        android:id="@+id/nf_st"
+                        android:layout_toEndOf="@id/right"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/TextHeading"
+                            android:text="@string/push_notifications"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/push_notify"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/notificationSettingsBtn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/nf_st"
+                        android:src="@drawable/right_com"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
