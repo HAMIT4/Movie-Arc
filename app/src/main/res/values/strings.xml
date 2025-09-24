@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Movie Arc</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="categories">Categories</string>
+    <string name="profile">Profile</string>
+    <string name="for_you">For You</string>
+    <string name="top_rated">Top Rated</string>
+</resources>
