@@ -10,6 +10,10 @@
         android:title="@string/categories"
         android:icon="@drawable/categorycom"/>
     <item
+        android:id="@+id/nav_watchlist"
+        android:title="@string/watchlist_"
+        android:icon="@drawable/bookmark_com"/>
+    <item
         android:id="@+id/nav_search"
         android:title="@string/search"
         android:icon="@android:drawable/ic_menu_search"/>

@@ -45,14 +45,14 @@
             android:text="@string/app_name"/>
 
         <ImageView
-            android:layout_toLeftOf="@id/ellip"
+            android:layout_toStartOf="@id/ellip"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:src="@drawable/bell_com"/>
 
         <ImageView
             android:id="@+id/ellip"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="true"
             android:layout_width="40dp"
             android:layout_height="wrap_content"

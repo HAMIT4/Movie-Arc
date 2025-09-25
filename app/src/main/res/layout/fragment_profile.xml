@@ -176,7 +176,7 @@
                         android:layout_height="wrap_content"
                         android:checked="false"
                         android:thumbTint="@android:color/white"
-                        app:trackTint="@android:color/holo_red_dark"/>
+                        app:trackTint="@color/switch_track_tint"/>
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -254,7 +254,7 @@
                         android:layout_height="wrap_content"
                         android:checked="false"
                         android:thumbTint="@android:color/white"
-                        app:trackTint="@android:color/holo_red_dark"/>
+                        app:trackTint="@color/switch_track_tint"/>
                 </RelativeLayout>
 
                 <View

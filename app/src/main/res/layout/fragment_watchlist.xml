@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".Fragments.Watchlist.WatchlistFragment">
+
+<!-- we might need to scroll the whole page at some point-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--        we start with the account header-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/light_dark_bg"
+                android:elevation="5dp"
+                android:padding="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/avatar_image"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/avatar_default" />
+
+                <LinearLayout
+                    android:id="@+id/accountInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/avatar_image"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/username"
+                        style="@style/TextHeading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/john_doe" />
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/john_doe_email_com" />
+                </LinearLayout>
+
+
+                <!--        wishlist info-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/accountInfo"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/avatar_image"
+                    android:orientation="horizontal">
+
+                    <!--            individual items-->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/rev_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/book_com" />
+
+                        <TextView
+                            android:id="@+id/review_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/rev_icon"
+                            android:text="@string/_0" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/review_count"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/rev_icon"
+                            android:text="@string/reveiws" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:id="@+id/wish_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/heart_com" />
+
+                        <TextView
+                            android:id="@+id/wishlist_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/wish_icon"
+                            android:text="@string/_0" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/wishlist_count"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/wish_icon"
+                            android:text="@string/wishlist" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:id="@+id/watch_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/time_com" />
+
+                        <TextView
+                            android:id="@+id/watch_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/watch_icon"
+                            android:text="@string/_0" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/watch_count"
+                            android:layout_marginStart="5dp"
+                            android:layout_toEndOf="@id/watch_icon"
+                            android:text="@string/watched" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!--            count section just for visualization-->
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/light_dark_bg"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/Watchlist_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/_0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#6621DF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/Watchlist_count"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/watchlist_" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/light_dark_bg"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/Wishlist_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/_0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#E600FF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/Wishlist_count"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/wishlist" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/light_dark_bg"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/Watched_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/_0"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#008EFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/Watched_count"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/watched" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+<!--            where our tabs and info will rest, hahaha-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout_watchList"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabTextAppearance="@style/CustomTabText"
+                    app:tabTextColor="@color/tab_unselected"
+                    app:tabSelectedTextColor="@color/light_blue"
+                    app:tabIndicatorColor="@android:color/holo_red_dark"
+                    app:tabMode="fixed"
+                    app:tabGravity="fill"
+                    app:tabIndicatorFullWidth="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpager_watchList"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="60dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout_watchList" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

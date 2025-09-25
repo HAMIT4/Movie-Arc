@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         // setup binding
         BottomNavigationView navView= findViewById(R.id.bottomNavigationView);
         AppBarConfiguration appBarConfiguration= new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_categories, R.id.nav_search, R.id.nav_profile
+                R.id.nav_home, R.id.nav_categories,R.id.nav_watchlist, R.id.nav_search, R.id.nav_profile
         ).build();
         NavController navController= Navigation.findNavController(this, R.id.fragmentContainerView2);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             title.setText("Categories");
         } else if (id == R.id.nav_profile) {
             title.setText("Profile");
+        } else {
+            title.setText("Watchlist");
         }
     }
 

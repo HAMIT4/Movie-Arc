@@ -23,4 +23,20 @@
         <item name="closeIconVisible">false</item>
     </style>
 
+<!--    styling for tab layout-->
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="CustomTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabPaddingStart">16dp</item>
+        <item name="tabPaddingEnd">16dp</item>
+        <item name="tabPaddingTop">8dp</item>
+        <item name="tabPaddingBottom">8dp</item>
+        <item name="tabMinWidth">72dp</item>
+        <item name="tabMaxWidth">120dp</item>
+    </style>
+
+
 </resources>
