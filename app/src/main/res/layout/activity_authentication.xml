@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroUI.AuthenticationActivity">
+
+<!--    let's use a scroll view cause why not, tablet users-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <!--    Logo section-->
+            <RelativeLayout
+                android:id="@+id/relativeLayout5"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/app_logo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/movie_logo" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/app_logo"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TitleHeading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/your_cinematic_journey_starts_here" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!--    our sing in and sign up section-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/light_dark_bg"
+                android:padding="20dp"
+                android:layout_gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout5">
+
+                <!--        button section-->
+                <LinearLayout
+                    android:id="@+id/buttonSection"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btn_signInSection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_selector"
+                        android:text="@string/sign_in"
+                        android:textAllCaps="false" />
+
+                    <Button
+                        android:id="@+id/btn_signUpSection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_selector"
+                        android:text="@string/sign_up"
+                        android:textAllCaps="false" />
+                </LinearLayout>
+
+                <!--        Info section combined and depending on section some will be hidden-->
+                <LinearLayout
+                    android:id="@+id/infoSection"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/buttonSection"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <!--            individual items-->
+
+                    <!--            Full name will be hidden in sign In-->
+                    <RelativeLayout
+                        android:id="@+id/fullname_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv1"
+                            style="@style/InfoHeading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/full_name" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv1"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/outline_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="8dp"
+                                android:src="@drawable/user_com" />
+
+                            <EditText
+                                android:id="@+id/fullName_ET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/enter_your_full_name"
+                                android:inputType="textPersonName"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <!--            Email section-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/tv2"
+                            style="@style/InfoHeading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/email" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv2"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/outline_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="8dp"
+                                android:src="@drawable/email_com" />
+
+                            <EditText
+                                android:id="@+id/email_ET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/enter_your_email"
+                                android:inputType="textEmailAddress"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <!--            Password section, remember view ..-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/tv3"
+                            style="@style/InfoHeading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/password" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv3"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/outline_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="8dp"
+                                android:src="@drawable/lock_com" />
+
+                            <EditText
+                                android:id="@+id/password_ET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/enter_your_password"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <!--            Confirm password, remember will be hidden in Sign in-->
+                    <RelativeLayout
+                        android:id="@+id/confirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/tv4"
+                            style="@style/InfoHeading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/confirm_password" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv4"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/outline_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="8dp"
+                                android:src="@drawable/lock_com" />
+
+                            <EditText
+                                android:id="@+id/confirm_password_ET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/enter_your_password"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <!--            remember me section will be hidden in signup-->
+                    <LinearLayout
+                        android:id="@+id/rememberSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/remeber_me" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="@string/forgot_password"
+                            android:textColor="#ff00" />
+
+                    </LinearLayout>
+
+                    <!--            Functional button section-->
+                    <Button
+                        android:id="@+id/btn_loginOrSignup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="@android:color/holo_red_dark"
+                        android:text="@string/sign_in"
+                        android:textAllCaps="false" />
+
+                    <!--            un-necessary or section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="@android:color/darker_gray" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/or"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="@android:color/darker_gray" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/continue_google"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/outline_circles_24"
+                        android:text="@string/continue_with_google"
+                        android:textAllCaps="false" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,5 +38,12 @@
         <item name="tabMaxWidth">120dp</item>
     </style>
 
+<!--    Styling for authentication page-->
+    <style name="InfoHeading">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
 
 </resources>
