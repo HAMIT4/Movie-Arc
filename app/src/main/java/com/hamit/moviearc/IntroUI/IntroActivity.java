@@ -27,7 +27,7 @@ import java.util.List;
 public class IntroActivity extends AppCompatActivity {
 
     private Button btnContinue, btnBack, btnSkip;
-    private FrameLayout frameContiner;
+    private FrameLayout frameContainer;
     private ProgressBar progressBar;
     private TextView stepCount;
     private Fragment activeFragment;
@@ -46,7 +46,7 @@ public class IntroActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btn_Continue);
         btnBack = findViewById(R.id.btn_back);
         btnSkip= findViewById(R.id.btn_skip);
-        frameContiner= findViewById(R.id.frameContainer);
+        frameContainer= findViewById(R.id.frameContainer);
         stepCount= findViewById(R.id.step_tv);
         progressBar= findViewById(R.id.progressBar);
 

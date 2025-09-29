@@ -53,4 +53,5 @@
     <string name="follow_you">Follow Your Favorite Actors</string>
     <string name="get_notified">Get notified about their latest movies</string>
     <string name="select_actors">Select actors that you\'d like to follow for personalized\n updates</string>
+    <string name="action">Action</string>
 </resources>

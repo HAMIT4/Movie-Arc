@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Genre"
+    android:layout_width="170dp"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/outline_bg">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/play_com"/>
+
+        <TextView
+            android:id="@+id/genreTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textStyle="bold"
+            android:text="@string/action"/>
+    </LinearLayout>
+
+</RelativeLayout>

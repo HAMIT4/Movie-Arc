@@ -3,11 +3,15 @@ package com.hamit.moviearc.IntroUI.IntroFragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.hamit.moviearc.IntroUI.IntroAdapters.GenreRecycler;
 import com.hamit.moviearc.R;
 
 /**
@@ -15,14 +19,17 @@ import com.hamit.moviearc.R;
  * Use the {@link GenreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenreFragment extends Fragment {
+public class GenreFragment extends Fragment implements GenreRecycler.OnGenreSelectedListener {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TextView genreCount;
 
-    // TODO: Rename and change types of parameters
+    private RecyclerView genreRecycler;
+    private GenreRecycler genreAdapter;
+
+
     private String mParam1;
     private String mParam2;
 
@@ -30,15 +37,6 @@ public class GenreFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GenreFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static GenreFragment newInstance(String param1, String param2) {
         GenreFragment fragment = new GenreFragment();
         Bundle args = new Bundle();
@@ -61,6 +59,21 @@ public class GenreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_genre, container, false);
+        View contentView= inflater.inflate(R.layout.fragment_genre, container, false);
+
+        genreCount= contentView.findViewById(R.id.genreCount);
+
+        // setup recyclerView
+        genreRecycler= contentView.findViewById(R.id.genreRecycler);
+        genreRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        genreAdapter= new GenreRecycler(this::onGenreCountChanged);
+        genreRecycler.setAdapter(genreAdapter);
+
+        return contentView;
+    }
+
+    @Override
+    public void onGenreCountChanged(int count) {
+        genreCount.setText("Selected " + count + " genres");
     }
 }
