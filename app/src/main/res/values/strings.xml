@@ -39,4 +39,18 @@
     <string name="continue_with_google">Continue with Google</string>
     <string name="or">or</string>
     <string name="your_cinematic_journey_starts_here">Your cinematic journey starts here</string>
+    <string name="Continue">Continue</string>
+    <string name="Continue_">Continue</string>
+    <string name="your_personal_movie_companion">Your Personal Movie Companion</string>
+    <string name="welcome_to_movie_arc">Welcome To Movie Arc</string>
+    <string name="discover_amazing_movies_tailored_just_for_you">Discover amazing movies tailored just for you</string>
+    <string name="personalized_recommendations">Personalized Recommendations</string>
+    <string name="community_reviews">Community Reviews</string>
+    <string name="smart_watchlists">Smart Watchlists</string>
+    <string name="choose_your_favourite_genre">Choose Your Favourite Genre</string>
+    <string name="help_us_understand_your_taste">Help us understand your taste</string>
+    <string name="select_genres_you_enjoy_to_get_better_recommendations">Select genres you enjoy to get better recommendations</string>
+    <string name="follow_you">Follow Your Favorite Actors</string>
+    <string name="get_notified">Get notified about their latest movies</string>
+    <string name="select_actors">Select actors that you\'d like to follow for personalized\n updates</string>
 </resources>

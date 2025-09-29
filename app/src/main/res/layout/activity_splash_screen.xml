@@ -5,6 +5,132 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_bg"
     tools:context=".SplashScreen">
+
+
+    <!--    Some animated loading progress-->
+    <RelativeLayout
+        android:id="@+id/relativeLayout6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.292">
+
+        <RelativeLayout
+            android:id="@+id/movie_L"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:rotation="15"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rotate_gb">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/movie_logo"
+                android:rotation="-15"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_L"
+            android:layout_centerHorizontal="true"
+            android:text="Movie Arc"
+            android:textColor="#B0A8A8"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_name"
+            android:layout_marginTop="5dp"
+            android:text="Discover Your Next Favourite"
+            android:textColor="#B0A8A8"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout7"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout6">
+
+        <LinearLayout
+            android:id="@+id/loading_dots_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+            
+            <View
+                android:id="@+id/dot1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/dot_shape"
+                android:layout_marginEnd="8dp"/>
+
+            <View
+                android:id="@+id/dot2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/dot_shape"
+                android:layout_marginEnd="8dp"/>
+
+            <View
+                android:id="@+id/dot3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/dot_shape"
+                android:layout_marginEnd="8dp"/>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout7">
+
+        <TextView
+            android:id="@+id/txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading your cinematic journey..."
+            android:textColor="#B0A8A8"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="powered by TMDb API"
+            android:textColor="#B0A8A8"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

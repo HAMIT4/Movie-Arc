@@ -45,5 +45,11 @@
         <item name="android:textColor">?attr/colorOnBackground</item>
     </style>
 
+<!--    custom button style-->
+    <style name="TransparentRedButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/button_red</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
 
 </resources>
