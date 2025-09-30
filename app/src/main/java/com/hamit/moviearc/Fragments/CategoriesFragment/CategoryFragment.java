@@ -41,7 +41,9 @@ public class CategoryFragment extends Fragment {
         categoryViewpager= contentView.findViewById(R.id.category_viewPager);
 
         // set our tabs, update once api is integrated
-        List<String> categories= Arrays.asList("Action", "Comedy", "Drama", "Horror", "Romance", "Thriller");
+        List<String> categories= Arrays.asList("Action", "Adventure", "Animation", "Comedy", "Crime",
+                "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
+                "Romance", "Science Fiction", "TV Movie", "Thriller", "War", "Western");
         //set adapter
         CategoryListAdapter adapter= new CategoryListAdapter(requireActivity(), categories);
         categoryViewpager.setAdapter(adapter);

@@ -193,7 +193,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
 
                 } else if (password.length() < 8) {
-                    Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
 
                 } else {
                     // every condition passed we can register the user
