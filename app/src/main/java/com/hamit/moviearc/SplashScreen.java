@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +18,26 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.hamit.moviearc.IntroUI.IntroActivity;
 
 public class SplashScreen extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     private View dot1, dot2, dot3;
     private Handler handler= new Handler();
     private RelativeLayout logoContiner;
     private static final Long CYCLE_DURATION= 3000L;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        currentUser = mAuth.getCurrentUser();
+    }
 
 
     @Override
@@ -38,6 +51,8 @@ public class SplashScreen extends AppCompatActivity {
             return insets;
         });
 
+        mAuth= FirebaseAuth.getInstance();
+
         // initialize the dots
         dot1= findViewById(R.id.dot1);
         dot2= findViewById(R.id.dot2);
@@ -50,7 +65,16 @@ public class SplashScreen extends AppCompatActivity {
         startFullAnimationCycle();
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreen.this, IntroActivity.class);
+
+            Intent intent;
+            if (currentUser != null){
+                // skip to the Main Activity since the user is already logged in
+                intent = new Intent(SplashScreen.this, MainActivity.class);
+                Toast.makeText(this, "Welcome Back", Toast.LENGTH_SHORT).show();
+            } else{
+                intent = new Intent(SplashScreen.this, IntroActivity.class);
+                Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show();
+            }
             startActivity(intent);
             finish();
         }, 7000);

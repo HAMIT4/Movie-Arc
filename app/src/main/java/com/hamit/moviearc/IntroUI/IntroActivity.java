@@ -72,6 +72,7 @@ public class IntroActivity extends AppCompatActivity {
                 // switch to authentication screen
                 Intent intent= new Intent(this, AuthenticationActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -92,6 +93,7 @@ public class IntroActivity extends AppCompatActivity {
         btnSkip.setOnClickListener(v->{
             Intent intent= new Intent(this, AuthenticationActivity.class);
             startActivity(intent);
+            finish();
         });
 
     }

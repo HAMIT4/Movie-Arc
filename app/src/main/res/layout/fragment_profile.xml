@@ -91,16 +91,38 @@
                         android:text="Community Member"/>
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:textAlignment="center"
-                    android:padding="8dp"
-                    android:background="@drawable/outline_bg"/>
+                    android:layout_marginEnd="20dp">
+
+                    <TextView
+                        android:id="@+id/btn_editAccount"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:text="Edit"
+                        android:textAlignment="center"
+                        android:padding="8dp"
+                        android:background="@drawable/outline_bg"/>
+
+                    <TextView
+                        android:id="@+id/btnLogout"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:text="Logout"
+                        android:textAlignment="center"
+                        android:textColor="@color/red"
+                        android:textStyle="bold"
+                        android:padding="8dp"
+                        android:background="@drawable/outline_bg"/>
+
+                </LinearLayout>
+
             </RelativeLayout>
 
 <!--            Appearance Settings-->
