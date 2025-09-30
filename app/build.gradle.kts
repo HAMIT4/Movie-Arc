@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -53,4 +55,8 @@ dependencies {
     // ... other dependencies
     implementation("androidx.navigation:navigation-fragment-ktx:2.9.4")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
 }

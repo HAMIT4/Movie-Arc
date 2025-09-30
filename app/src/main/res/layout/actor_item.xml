@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/actorPicker"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/light_dark_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    A follow tag that will show up when an actor is selected-->
+    <TextView
+        android:id="@+id/followTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/follow"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:padding="5dp"
+        android:background="@drawable/light_dark_bg"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatar_imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitCenter"
+            android:background="@color/red"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            android:contentDescription="@string/avatar_image"/>
+
+        <TextView
+            android:id="@+id/actorName"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/ryan_gosling"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            style="@style/TitleHeading"/>
+    </LinearLayout>
+
+</RelativeLayout>
