@@ -115,8 +115,6 @@ public class SearchFragment extends Fragment {
 
                     // set recycler view to visible
                     searchResultRecycler.setVisibility(View.VISIBLE);
-
-                    // TODO: call Api and viewModel to fetch search results
                     fetchSearchResults(query);
 
                 }

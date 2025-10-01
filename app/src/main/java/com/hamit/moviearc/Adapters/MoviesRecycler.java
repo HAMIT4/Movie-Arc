@@ -3,6 +3,7 @@ package com.hamit.moviearc.Adapters;
 import static com.hamit.moviearc.Network.Services.TmdbService.IMAGE_BASE_URL;
 import static com.hamit.moviearc.Network.Services.TmdbService.IMAGE_SIZE_W342;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.hamit.moviearc.Network.Data.Movie;
 import com.hamit.moviearc.R;
+import com.hamit.moviearc.Ui.MovieDetails;
 
 import java.util.List;
 
@@ -57,6 +59,12 @@ public class MoviesRecycler extends RecyclerView.Adapter<MoviesRecycler.MyViewHo
                 .error(R.drawable.error_image)
                 .into(holder.movieImage);
 
+        // open the movie Details activity when a movie is selected
+        holder.itemView.setOnClickListener(v->{
+            Intent intent = new Intent(holder.itemView.getContext(), MovieDetails.class);
+            intent.putExtra("movie_data", movie);
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 
     @Override

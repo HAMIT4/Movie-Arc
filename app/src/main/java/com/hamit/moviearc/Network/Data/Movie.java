@@ -1,10 +1,14 @@
 package com.hamit.moviearc.Network.Data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("adult")
     private boolean adult;
@@ -51,7 +55,65 @@ public class Movie {
     @SerializedName("vote_count")
     private int voteCount;
 
-    // Getters
+
+    public Movie() {
+    }
+
+    // Parcelable constructor
+    protected Movie(Parcel in) {
+        adult = in.readByte() != 0;
+        backdropPath = in.readString();
+        id = in.readInt();
+        title = in.readString();
+        originalTitle = in.readString();
+        overview = in.readString();
+        posterPath = in.readString();
+        mediaType = in.readString();
+        originalLanguage = in.readString();
+        genreIds = new ArrayList<>();
+        in.readList(genreIds, Integer.class.getClassLoader());
+        popularity = in.readDouble();
+        releaseDate = in.readString();
+        video = in.readByte() != 0;
+        voteAverage = in.readDouble();
+        voteCount = in.readInt();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (adult ? 1 : 0));
+        dest.writeString(backdropPath);
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(originalTitle);
+        dest.writeString(overview);
+        dest.writeString(posterPath);
+        dest.writeString(mediaType);
+        dest.writeString(originalLanguage);
+        dest.writeList(genreIds);
+        dest.writeDouble(popularity);
+        dest.writeString(releaseDate);
+        dest.writeByte((byte) (video ? 1 : 0));
+        dest.writeDouble(voteAverage);
+        dest.writeInt(voteCount);
+    }
 
     public boolean isAdult() {
         return adult;
@@ -111,5 +173,65 @@ public class Movie {
 
     public int getVoteCount() {
         return voteCount;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 }
