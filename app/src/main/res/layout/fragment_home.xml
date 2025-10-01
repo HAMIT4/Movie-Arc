@@ -12,7 +12,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -23,31 +23,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/outline_bg"
-                android:elevation="5dp">
-
-                <SearchView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:iconifiedByDefault="false"
-                    android:queryBackground="@android:color/transparent"
-                    android:queryHint="Search Movies, actors genres..." />
-            </RelativeLayout>
-
             <!--    our banner slider/recycler-->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/imageSlider"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>
 
             <!--    For you recycler view -->
             <RelativeLayout
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -67,9 +52,9 @@
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/forYouRecycler"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="210dp"/>
 
 <!--            Top rated Recycler-->
             <RelativeLayout
@@ -93,9 +78,9 @@
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topRatedRecycler"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="wrap_content"/>
 
 
         </LinearLayout>

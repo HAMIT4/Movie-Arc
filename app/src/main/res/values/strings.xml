@@ -57,4 +57,7 @@
     <string name="avatar_image">Avatar Image</string>
     <string name="ryan_gosling">Ryan Gosling</string>
     <string name="follow">Following</string>
+    <string name="the_fantastic_4_first_steps">The Fantastic 4: First Steps</string>
+    <string name="thriller">Thriller</string>
+    <string name="sci_fi">sci-fi</string>
 </resources>
