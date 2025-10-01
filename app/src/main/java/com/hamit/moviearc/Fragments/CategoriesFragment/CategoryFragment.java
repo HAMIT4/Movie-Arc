@@ -17,8 +17,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hamit.moviearc.Fragments.CategoriesFragment.Adapters.CategoryListAdapter;
 import com.hamit.moviearc.R;
+import com.hamit.moviearc.Utils.GenreManager;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
@@ -40,10 +42,8 @@ public class CategoryFragment extends Fragment {
         tabLayoutCategory= contentView.findViewById(R.id.category_tabLayout);
         categoryViewpager= contentView.findViewById(R.id.category_viewPager);
 
-        // set our tabs, update once api is integrated
-        List<String> categories= Arrays.asList("Action", "Adventure", "Animation", "Comedy", "Crime",
-                "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
-                "Romance", "Science Fiction", "TV Movie", "Thriller", "War", "Western");
+        List<String> categories= GenreManager.getAllGenreNames();
+
         //set adapter
         CategoryListAdapter adapter= new CategoryListAdapter(requireActivity(), categories);
         categoryViewpager.setAdapter(adapter);

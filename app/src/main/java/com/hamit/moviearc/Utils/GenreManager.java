@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hamit.moviearc.Network.Data.GenreResponse;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,19 @@ public class GenreManager {
             Log.e("GenreManager", "Error loading genres from cache", e);
             return false;
         }
+    }
+
+    public static int getGenreId(String genreName) {
+        for (Map.Entry<Integer, String> entry : genreMap.entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(genreName)) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
+    public static List<String> getAllGenreNames() {
+        return new ArrayList<>(genreMap.values());
     }
 
     // Get all genres as map for debugging or other uses
