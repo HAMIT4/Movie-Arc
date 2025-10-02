@@ -1,9 +1,14 @@
 package com.hamit.moviearc.Network.Data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class MultiSearchResponse {
+public class MultiSearchResponse implements Parcelable {
 
     @SerializedName("page")
     private int page;
@@ -16,6 +21,43 @@ public class MultiSearchResponse {
 
     @SerializedName("total_results")
     private int totalResults;
+
+    // Default constructor
+    public MultiSearchResponse() {
+    }
+
+    // Parcelable constructor
+    protected MultiSearchResponse(Parcel in) {
+        page = in.readInt();
+        results = in.createTypedArrayList(ResultItem.CREATOR);
+        totalPages = in.readInt();
+        totalResults = in.readInt();
+    }
+
+    public static final Creator<MultiSearchResponse> CREATOR = new Creator<MultiSearchResponse>() {
+        @Override
+        public MultiSearchResponse createFromParcel(Parcel in) {
+            return new MultiSearchResponse(in);
+        }
+
+        @Override
+        public MultiSearchResponse[] newArray(int size) {
+            return new MultiSearchResponse[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(page);
+        dest.writeTypedList(results);
+        dest.writeInt(totalPages);
+        dest.writeInt(totalResults);
+    }
 
     // Getters and setters
     public int getPage() { return page; }
@@ -30,8 +72,8 @@ public class MultiSearchResponse {
     public int getTotalResults() { return totalResults; }
     public void setTotalResults(int totalResults) { this.totalResults = totalResults; }
 
-    // Inner class for Results
-    public static class ResultItem {
+    // Inner class for Results - also made Parcelable
+    public static class ResultItem implements Parcelable {
         @SerializedName("adult")
         private boolean adult;
 
@@ -88,6 +130,75 @@ public class MultiSearchResponse {
 
         @SerializedName("origin_country")
         private List<String> originCountry; // For TV
+
+        // Default constructor
+        public ResultItem() {
+        }
+
+        // Parcelable constructor
+        protected ResultItem(Parcel in) {
+            adult = in.readByte() != 0;
+            backdropPath = in.readString();
+            id = in.readInt();
+            title = in.readString();
+            name = in.readString();
+            originalTitle = in.readString();
+            originalName = in.readString();
+            overview = in.readString();
+            posterPath = in.readString();
+            mediaType = in.readString();
+            originalLanguage = in.readString();
+            genreIds = new ArrayList<>();
+            in.readList(genreIds, Integer.class.getClassLoader());
+            popularity = in.readDouble();
+            releaseDate = in.readString();
+            firstAirDate = in.readString();
+            byte tmpVideo = in.readByte();
+            video = tmpVideo == 0 ? null : tmpVideo == 1;
+            voteAverage = in.readDouble();
+            voteCount = in.readInt();
+            originCountry = in.createStringArrayList();
+        }
+
+        public static final Creator<ResultItem> CREATOR = new Creator<ResultItem>() {
+            @Override
+            public ResultItem createFromParcel(Parcel in) {
+                return new ResultItem(in);
+            }
+
+            @Override
+            public ResultItem[] newArray(int size) {
+                return new ResultItem[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte((byte) (adult ? 1 : 0));
+            dest.writeString(backdropPath);
+            dest.writeInt(id);
+            dest.writeString(title);
+            dest.writeString(name);
+            dest.writeString(originalTitle);
+            dest.writeString(originalName);
+            dest.writeString(overview);
+            dest.writeString(posterPath);
+            dest.writeString(mediaType);
+            dest.writeString(originalLanguage);
+            dest.writeList(genreIds);
+            dest.writeDouble(popularity);
+            dest.writeString(releaseDate);
+            dest.writeString(firstAirDate);
+            dest.writeByte((byte) (video == null ? 0 : video ? 1 : 2));
+            dest.writeDouble(voteAverage);
+            dest.writeInt(voteCount);
+            dest.writeStringList(originCountry);
+        }
 
         // Getters and setters
         public boolean isAdult() { return adult; }
@@ -146,6 +257,20 @@ public class MultiSearchResponse {
 
         public List<String> getOriginCountry() { return originCountry; }
         public void setOriginCountry(List<String> originCountry) { this.originCountry = originCountry; }
+
+        // Helper method to get display title (either title or name)
+        public String getDisplayTitle() {
+            return title != null ? title : name;
+        }
+
+        // Helper method to get display original title (either originalTitle or originalName)
+        public String getDisplayOriginalTitle() {
+            return originalTitle != null ? originalTitle : originalName;
+        }
+
+        // Helper method to get display date (either releaseDate or firstAirDate)
+        public String getDisplayDate() {
+            return releaseDate != null ? releaseDate : firstAirDate;
+        }
     }
 }
-

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,6 +61,23 @@ public class SearchRecycler extends RecyclerView.Adapter<SearchRecycler.MyViewHo
                 .error(R.drawable.error_image)
                 .into(holder.movieImage);
 
+        // test details activity for movie details from search
+        holder.itemView.setOnClickListener(v -> {
+            MultiSearchResponse.ResultItem resultItem = searchResponse.get(position);
+            Intent intent= new Intent(holder.itemView.getContext(), MovieDetails.class);
+            // try to pass results for movies only
+            if ("movie".equals(resultItem.getMediaType())) {
+                intent.putExtra("result_item", resultItem);
+            } else {
+                Toast.makeText(holder.itemView.getContext(),
+                        "This feature is available for movies only",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            holder.itemView.getContext().startActivity(intent);
+
+        });
 
     }
 
