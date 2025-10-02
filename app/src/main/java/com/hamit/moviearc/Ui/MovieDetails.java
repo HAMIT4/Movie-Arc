@@ -4,6 +4,7 @@ import static com.hamit.moviearc.Fragments.HomeFragment.HomeFragment.API_KEY;
 import static com.hamit.moviearc.Network.Services.TmdbService.IMAGE_BASE_URL;
 import static com.hamit.moviearc.Network.Services.TmdbService.IMAGE_SIZE_W500;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -130,8 +131,10 @@ public class MovieDetails extends AppCompatActivity {
             finish();
         });
 
-
-
+        // now, now we watch some movies
+        watchBtn.setOnClickListener(v->{
+            openMoviePlayer();
+        });
     }
     private void fetchMovieTrailer() {
         int movieId= movie !=null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
@@ -373,6 +376,23 @@ public class MovieDetails extends AppCompatActivity {
                 Toast.makeText(MovieDetails.this, "Failed to get Recommended Movies", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void openMoviePlayer(){
+        int movieId= movie !=null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
+
+        String movieTitle= movie !=null ? movie.getTitle() : (resultItem != null ? resultItem.getDisplayTitle() : "Movie");
+
+        if (movieId == -1){
+            Toast.makeText(this, "Movie not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // send data to movie player
+        Intent intent= new Intent(this, PlayerActivity.class);
+        intent.putExtra("movieTitle", movieTitle);
+        intent.putExtra("tmdbId", movieId);
+        startActivity(intent);
     }
 
     @Override

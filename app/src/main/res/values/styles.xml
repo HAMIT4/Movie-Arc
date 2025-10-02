@@ -63,6 +63,14 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+<!--    Player full screen theme-->
+    <style name="AppTheme.FullScreen" parent="">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 
 
 

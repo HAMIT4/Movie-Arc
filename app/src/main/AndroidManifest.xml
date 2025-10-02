@@ -16,6 +16,12 @@
         android:theme="@style/Theme.MovieArc"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Ui.PlayerActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"/>
+        <activity
             android:name=".Ui.MovieDetails"
             android:exported="false" />
         <activity
@@ -23,7 +29,7 @@
             android:exported="false" />
         <activity
             android:name=".IntroUI.AuthenticationActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
