@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.hamit.moviearc.Adapters.PopularRecycler;
+import com.hamit.moviearc.HelperClasses.FirestoreHelper;
 import com.hamit.moviearc.Network.Clients.RetrofitClient;
 import com.hamit.moviearc.Network.Data.Movie;
 import com.hamit.moviearc.Network.Data.MovieResponse;
@@ -55,13 +56,17 @@ public class MovieDetails extends AppCompatActivity {
     private RecyclerView similarMoviesRecycler;
     private RecyclerView recommendedMovies;
 
-    private ImageView btnBack, backdropImage;
+    private ImageView btnBack, backdropImage, heartIcon, bookmarkIcon;
     private TextView movieTitle, movieRating, movieRelease, movieSynopsis;
     private MultiSearchResponse.ResultItem resultItem;
 
     private YouTubePlayerView youTubePlayerView;
     private Video trailer;
-    private LinearLayout trailerBtn, watchBtn;
+    private LinearLayout trailerBtn, watchBtn, btnFavorite, btnWishlist;
+
+    private FirestoreHelper firestoreHelper;
+    private boolean isLiked= false;
+    private boolean isInWishlist= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class MovieDetails extends AppCompatActivity {
         });
 
         mdbService= RetrofitClient.getTmdbService();
+        firestoreHelper= new FirestoreHelper();
 
         // initialize views
         btnBack = findViewById(R.id.btn_exit);
@@ -89,6 +95,10 @@ public class MovieDetails extends AppCompatActivity {
         trailerBtn= findViewById(R.id.trailer_btn);
         watchBtn= findViewById(R.id.watch_btn);
         youTubePlayerView = findViewById(R.id.youtubePlayerView);
+        btnFavorite= findViewById(R.id.btn_favorite);
+        btnWishlist= findViewById(R.id.btn_wishlist);
+        heartIcon= findViewById(R.id.heart_icon);
+        bookmarkIcon= findViewById(R.id.bookmark_icon);
 
         similarMoviesRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recommendedMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -135,7 +145,141 @@ public class MovieDetails extends AppCompatActivity {
         watchBtn.setOnClickListener(v->{
             openMoviePlayer();
         });
+
+        setupFavoriteButton();
+        setupWishlistButton();
+
+        // Check initial states after movie data is loaded
+        if (movie != null || resultItem != null) {
+            checkInitialStates();
+        }
+
     }
+
+    private void checkInitialStates() {
+        int movieId = getCurrentMovieId();
+        if (movieId == -1) return;
+        // Check if movie is liked
+        firestoreHelper.isMovieLiked(movieId, isLiked -> {
+            this.isLiked = isLiked;
+            updateFavoriteButton();
+        });
+
+        // Check if movie is in wishlist
+        firestoreHelper.isMovieInWishlist(movieId, inWishlist -> {
+            this.isInWishlist = inWishlist;
+            updateWishlistButton();
+        });
+
+    }
+
+    private void setupWishlistButton() {
+        btnWishlist.setOnClickListener(v -> {
+            int movieId = getCurrentMovieId();
+            Movie currentMovie = getCurrentMovie();
+
+            if (currentMovie == null || movieId == -1) {
+                Toast.makeText(this, "Movie data not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (isInWishlist) {
+                // Remove from wishlist
+                firestoreHelper.removeFromWishlist(movieId, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isInWishlist = false;
+                        updateWishlistButton();
+                        Toast.makeText(MovieDetails.this, "Removed from watchlist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // Add to wishlist
+                firestoreHelper.addToWishlist(currentMovie, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isInWishlist = true;
+                        updateWishlistButton();
+                        Toast.makeText(MovieDetails.this, "Added to watchlist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void setupFavoriteButton() {
+        btnFavorite.setOnClickListener(v -> {
+            int movieId = movie != null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
+            Movie currentMovie = getCurrentMovie();
+
+            if (currentMovie == null || movieId == -1) {
+                Toast.makeText(this, "Movie data not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (isLiked) {
+                // Remove from favorites
+                firestoreHelper.removeFromLikedMovies(movieId, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isLiked = false;
+                        updateFavoriteButton();
+                        Toast.makeText(MovieDetails.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // Add to favorites
+                firestoreHelper.addToLikedMovies(currentMovie, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isLiked = true;
+                        updateFavoriteButton();
+                        Toast.makeText(MovieDetails.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+    private void updateFavoriteButton() {
+        if (isLiked) {
+            heartIcon.setImageResource(R.drawable.heart_red_com);
+            btnFavorite.setBackgroundResource(R.drawable.red_bg);
+        } else {
+            heartIcon.setImageResource(R.drawable.heart_com);
+            btnFavorite.setBackgroundResource(R.drawable.light_dark_bg);
+        }
+    }
+    private void updateWishlistButton() {
+        if (isInWishlist) {
+            bookmarkIcon.setImageResource(R.drawable.bookmark_blue_com);
+            btnWishlist.setBackgroundResource(R.drawable.red_bg);
+        } else {
+            bookmarkIcon.setImageResource(R.drawable.bookmark_com);
+            btnWishlist.setBackgroundResource(R.drawable.light_dark_bg);
+        }
+    }
+
     private void fetchMovieTrailer() {
         int movieId= movie !=null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
         if(movieId == -1) return;
@@ -401,6 +545,49 @@ public class MovieDetails extends AppCompatActivity {
         if (youTubePlayerView != null) {
             youTubePlayerView.release();
         }
+    }
+
+    // helper methods
+    // Helper method to get current movie ID
+    private int getCurrentMovieId() {
+        if (movie != null) {
+            return movie.getId();
+        } else if (resultItem != null) {
+            return resultItem.getId();
+        }
+        return -1;
+    }
+
+    // Helper method to get current Movie object
+    private Movie getCurrentMovie() {
+        if (movie != null) {
+            return movie;
+        } else if (resultItem != null && "movie".equals(resultItem.getMediaType())) {
+            // Convert ResultItem to Movie object
+            return convertResultItemToMovie(resultItem);
+        }
+        return null;
+    }
+    // Convert ResultItem to Movie object for Firestore
+    private Movie convertResultItemToMovie(MultiSearchResponse.ResultItem resultItem) {
+        Movie movie = new Movie();
+        movie.setId(resultItem.getId());
+        movie.setTitle(resultItem.getTitle() != null ? resultItem.getTitle() : resultItem.getName());
+        movie.setOriginalTitle(resultItem.getOriginalTitle() != null ? resultItem.getOriginalTitle() : resultItem.getOriginalName());
+        movie.setOverview(resultItem.getOverview());
+        movie.setPosterPath(resultItem.getPosterPath());
+        movie.setBackdropPath(resultItem.getBackdropPath());
+        movie.setReleaseDate(resultItem.getReleaseDate() != null ? resultItem.getReleaseDate() : resultItem.getFirstAirDate());
+        movie.setVoteAverage(resultItem.getVoteAverage());
+        movie.setVoteCount(resultItem.getVoteCount());
+        movie.setPopularity(resultItem.getPopularity());
+        movie.setMediaType(resultItem.getMediaType());
+        movie.setGenreIds(resultItem.getGenreIds());
+        // Set default values for required fields
+        movie.setAdult(false);
+        movie.setVideo(false);
+        movie.setOriginalLanguage(resultItem.getOriginalLanguage() != null ? resultItem.getOriginalLanguage() : "en");
+        return movie;
     }
 
 

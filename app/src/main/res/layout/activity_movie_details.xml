@@ -222,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                android:weightSum="2"
+                android:weightSum="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout9">
@@ -247,7 +247,30 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/add_to_whishlist" />
+                        android:text="Add to Favorite" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_watchlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/light_dark_bg"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/watch_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/heart_com" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="Add to WatchList" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -261,6 +284,7 @@
                     android:padding="8dp">
 
                     <ImageView
+                        android:id="@+id/bookmark_icon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:src="@drawable/bookmark_com" />

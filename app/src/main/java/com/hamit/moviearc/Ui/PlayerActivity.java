@@ -3,6 +3,7 @@ package com.hamit.moviearc.Ui;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +55,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private boolean sourceFound = false;
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,15 @@ public class PlayerActivity extends AppCompatActivity {
         initializeViews();
         setupWebView();
         loadMovieWithFallback();
+
+        // consume touch event till source is confirmed
+        webView.setOnTouchListener((v, event) ->{
+            if (!sourceFound){
+                Log.d("PlayerActivity", "Blocking touch event before source is confirmed.");
+                return true;
+            }
+            return false;
+        });
 
     }
 
@@ -121,6 +131,43 @@ public class PlayerActivity extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false);
 
         webView.setWebViewClient(new WebViewClient(){
+
+            // let's try blocking ads an the popups
+
+            // block redirection
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                String url = request.getUrl().toString();
+                // legitimate video source domains (including redirect targets)
+                String[] legitimateDomains = {
+                        "vidsrc.me", "vidsrc.net", "vidsrc.to", "vidsrc.icu",  // vidsrc family
+                        "2embed.org", "ww7.2embed.org", "ww5.2embed.org",      // 2embed family
+                        "moviesapi.club", "moviesapi.cc",                      // moviesapi family
+                        "autoembed.co", "autoembed.cc",                        // autoembed family
+                        "vidlink.pro", "vidlink.io",                           // vidlink family
+                        "multiembed.mov", "embed.sbs",                         // other common sources
+                        "youtube.com", "youtu.be",                             // YouTube embeds
+                        "vimeo.com"                                            // Vimeo embeds
+                };
+
+                boolean isLegitimateRedirect = false;
+                for(String domain : legitimateDomains){
+                    if (url.contains(domain)) {
+                        isLegitimateRedirect = true;
+                        Log.d("AdBlocker", "Allowing legitimate redirect to: " + url);
+                        break;
+                    }
+                }
+
+                // Block everything except legitimate video sources
+                if (!isLegitimateRedirect) {
+                    Log.w("AdBlocker", "Blocked ad/tracker redirect: " + url);
+                    Log.d("AdBlocker", "Blocked ad redirect ");
+                    return true;
+                }
+                return false;
+            }
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -174,6 +221,14 @@ public class PlayerActivity extends AppCompatActivity {
 
 
         webView.setWebChromeClient(new WebChromeClient(){
+
+            // block new windows/ pop-ups
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                Log.w("AdBlocker", "Blocked new window/popup attempt.");
+                return true; // true so as to block creation of new window.
+            }
+
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
@@ -288,11 +343,7 @@ public class PlayerActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
+    
 
     @Override
     protected void onPause() {

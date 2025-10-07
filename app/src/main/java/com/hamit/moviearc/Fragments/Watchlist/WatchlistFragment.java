@@ -12,9 +12,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.hamit.moviearc.Fragments.Watchlist.Adapters.CategoryPageAdapter;
 import com.hamit.moviearc.R;
 
@@ -22,9 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WatchlistFragment extends Fragment {
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
     private TabLayout tablayout;
     private ViewPager2 viewPager;
+
+    private TextView username, email;
 
     private WatchlistViewModel mViewModel;
 
@@ -49,7 +56,22 @@ public class WatchlistFragment extends Fragment {
                 (tab, position) -> tab.setText(categories.get(position))
         ).attach();
 
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        username= contentView.findViewById(R.id.username);
+        email= contentView.findViewById(R.id.email);
+        // update our user info UI
+        updateUserInfo(user);
+
         return contentView;
+    }
+
+    private void updateUserInfo(FirebaseUser user) {
+        if (user != null){
+            // set our text
+            username.setText(user.getDisplayName());
+            email.setText(user.getEmail());
+        }
     }
 
     @Override
