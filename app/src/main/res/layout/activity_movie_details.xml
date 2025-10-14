@@ -264,7 +264,7 @@
                         android:id="@+id/watch_icon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/heart_com" />
+                        android:src="@drawable/watchlist_default_com" />
 
                     <TextView
                         android:layout_width="wrap_content"

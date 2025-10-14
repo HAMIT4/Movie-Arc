@@ -56,17 +56,18 @@ public class MovieDetails extends AppCompatActivity {
     private RecyclerView similarMoviesRecycler;
     private RecyclerView recommendedMovies;
 
-    private ImageView btnBack, backdropImage, heartIcon, bookmarkIcon;
+    private ImageView btnBack, backdropImage, heartIcon, bookmarkIcon, watchIcon;
     private TextView movieTitle, movieRating, movieRelease, movieSynopsis;
     private MultiSearchResponse.ResultItem resultItem;
 
     private YouTubePlayerView youTubePlayerView;
     private Video trailer;
-    private LinearLayout trailerBtn, watchBtn, btnFavorite, btnWishlist;
+    private LinearLayout trailerBtn, watchBtn, btnFavorite, btnWishlist, btnWatchList;
 
     private FirestoreHelper firestoreHelper;
     private boolean isLiked= false;
     private boolean isInWishlist= false;
+    private boolean isInWatchList= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class MovieDetails extends AppCompatActivity {
         btnWishlist= findViewById(R.id.btn_wishlist);
         heartIcon= findViewById(R.id.heart_icon);
         bookmarkIcon= findViewById(R.id.bookmark_icon);
+        btnWatchList= findViewById(R.id.btn_watchlist);
+        watchIcon= findViewById(R.id.watch_icon);
 
         similarMoviesRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recommendedMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -148,12 +151,69 @@ public class MovieDetails extends AppCompatActivity {
 
         setupFavoriteButton();
         setupWishlistButton();
+        setupWatchListButton();
 
         // Check initial states after movie data is loaded
         if (movie != null || resultItem != null) {
             checkInitialStates();
         }
 
+    }
+
+    public void setupWatchListButton() {
+        btnWatchList.setOnClickListener(v->{
+            int movieId = movie != null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
+            Movie currentMovie = getCurrentMovie();
+
+            if (currentMovie == null || movieId == -1) {
+                Toast.makeText(this, "Movie data not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (isInWatchList) {
+                // remove from watchlist
+                firestoreHelper.removeFromWatchlist(movieId, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isInWatchList = false;
+                        updateWatchlistButton();
+                        Toast.makeText(MovieDetails.this, "Removed from Watchlist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // add to watchlist
+                firestoreHelper.removeFromWatchlist(movieId, new FirestoreHelper.FirestoreCallback() {
+                    @Override
+                    public void onSuccess() {
+                        isInWatchList= true;
+                        updateWatchlistButton();
+                        Toast.makeText(MovieDetails.this, "Added to Watchlist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Toast.makeText(MovieDetails.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
+        });
+    }
+
+    public void updateWatchlistButton(){
+        if(isInWatchList){
+            btnWatchList.setBackgroundResource(R.drawable.red_bg);
+            watchIcon.setImageResource(R.drawable.watchlist_true_com);
+        }else {
+            btnWatchList.setBackgroundResource(R.drawable.light_dark_bg);
+            watchIcon.setImageResource(R.drawable.watchlist_default_com);
+        }
     }
 
     private void checkInitialStates() {

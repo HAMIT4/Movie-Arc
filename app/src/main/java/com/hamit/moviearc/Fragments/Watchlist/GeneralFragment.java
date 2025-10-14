@@ -2,16 +2,26 @@ package com.hamit.moviearc.Fragments.Watchlist;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.hamit.moviearc.Adapters.UserMovieRecycler;
+import com.hamit.moviearc.HelperClasses.FirestoreHelper;
+import com.hamit.moviearc.Network.Data.Movie;
 import com.hamit.moviearc.R;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +36,9 @@ public class GeneralFragment extends Fragment {
     private String category;
     private TextView emptyList;
     private RecyclerView generalRecycler;
+    private FirestoreHelper firestoreHelper;
+    private UserMovieRecycler movieAdapter;
+    private List<Movie> movieList;
 
 
     public GeneralFragment() {
@@ -47,6 +60,16 @@ public class GeneralFragment extends Fragment {
         if (getArguments() != null) {
             category= getArguments().getString(ARG_CATEGORY);
         }
+
+        firestoreHelper= new FirestoreHelper();
+        movieList= new ArrayList<>();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        loadCategoryData();
     }
 
     @Override
@@ -60,29 +83,181 @@ public class GeneralFragment extends Fragment {
         generalRecycler= contentView.findViewById(R.id.generalRecyclerView);
 
 
-        // remember to setup the recycler view to show details depending on tab selected
-        // Load data to display and setup recycler
-
-        loadCategoryData();
+        // setup recyclerView
+        setupRecyclerView();
 
         return contentView;
     }
 
+    public void setupRecyclerView(){
+        generalRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        movieAdapter = new UserMovieRecycler(movieList);
+        generalRecycler.setAdapter(movieAdapter);
+    }
+
     private void loadCategoryData() {
-        List<String> data = Collections.emptyList();
-        // here we will switch data depending on the tap
+        switch (category) {
+            case "Watchlist":
+                loadWatchlist();
+                break;
+            case "Wishlist":
+                loadWishlist();
+                break;
+            case "Liked":
+                loadLikedMovies();
+                break;
+            case "History":
+                loadHistory();
+                break;
+            case "Reviews":
+                loadReviews();
+                break;
+            default:
+                showEmptyState();
+                break;
+        }
+    }
 
-        // TODO: the data will be loaded from saved user data, either from the database or a shared storage class!!
+    private void showEmptyState() {
+        emptyList.setVisibility(View.VISIBLE);
+        generalRecycler.setVisibility(View.GONE);
 
+        // Set appropriate empty message based on category
+        switch (category) {
+            case "Watchlist":
+                emptyList.setText("Your watchlist is empty");
+                break;
+            case "Wishlist":
+                emptyList.setText("Your wishlist is empty");
+                break;
+            case "Liked Movies":
+                emptyList.setText("You haven't liked any movies yet");
+                break;
+            case "History":
+                emptyList.setText("No viewing history");
+                break;
+            case "Reviews":
+                emptyList.setText("No reviews yet");
+                break;
+        }
+    }
 
-        if (data.isEmpty()) {
-            // show our hidden empty text and hide recycler view
-            emptyList.setVisibility(View.VISIBLE);
-            generalRecycler.setVisibility(View.GONE);
-        } else{
-            // hide our hidden empty text and show recycler view
+    private void loadReviews() {
+        // nothing here yet
+    }
+
+    private void loadHistory() {
+        // TODO: Implement history loading if you have history collection
+        showEmptyState();
+        emptyList.setText("No history available");
+    }
+
+    private void loadLikedMovies() {
+        firestoreHelper.getLikedMovies(new FirestoreHelper.CollectionCallback() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                movieList.clear();
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        Movie movie = document.toObject(Movie.class);
+                        if (movie != null) {
+                            movieList.add(movie);
+                        }
+                    }
+                    updateUI();
+                } else {
+                    showEmptyState();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), "Failed to load liked movies: " + error, Toast.LENGTH_SHORT).show();
+                showEmptyState();
+            }
+        });
+    }
+
+    private void loadWishlist() {
+        firestoreHelper.getWishlist(new FirestoreHelper.CollectionCallback() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                movieList.clear();
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        Movie movie = document.toObject(Movie.class);
+                        if (movie != null) {
+                            movieList.add(movie);
+                        }
+                    }
+                    updateUI();
+                } else {
+                    showEmptyState();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), "Failed to load wishlist: " + error, Toast.LENGTH_SHORT).show();
+                showEmptyState();
+            }
+        });
+    }
+
+    private void loadWatchlist(){
+        firestoreHelper.getWatchlist(new FirestoreHelper.CollectionCallback() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                movieList.clear();
+                if (!queryDocumentSnapshots.isEmpty()){
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()){
+                        Movie movie = document.toObject(Movie.class);
+                        if(movie != null){
+                            movieList.add(movie);
+                        }
+                    }
+                    updateUI();
+                } else{
+                    showEmptyState();
+                }
+                
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(getContext(), "Failed to load watchlist: " + error, Toast.LENGTH_SHORT).show();
+                showEmptyState();
+            }
+        });
+    }
+
+    private void updateUI() {
+        if (movieList.isEmpty()) {
+            showEmptyState();
+        } else {
+            // Update the adapter and show recyclerView
+            movieAdapter.notifyDataSetChanged();
             emptyList.setVisibility(View.GONE);
             generalRecycler.setVisibility(View.VISIBLE);
+        }
+        notifyParentToUpdateCounts();
+    }
+
+    private void notifyParentToUpdateCounts() {
+        // Get parent fragment and call refreshCounts
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof WatchlistFragment) {
+            ((WatchlistFragment) parentFragment).refreshCounts();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload data when fragment becomes visible
+        if (category != null && movieList.isEmpty()) {
+            loadCategoryData();
         }
     }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp"
+    android:elevation="5dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/posterImg"
+            android:layout_width="100dp"
+            android:layout_height="85dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/backdrop"/>
+
+        <TextView
+            android:id="@+id/movieTitle"
+            android:layout_toEndOf="@id/posterImg"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_text"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/movieTitle"
+            android:layout_toEndOf="@id/posterImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2025-10-2"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="10dp"/>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movieTitle"
+            android:layout_toEndOf="@id/releaseDate"
+            android:orientation="horizontal"
+            android:background="@drawable/dark_bg"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/star_com"/>
+
+            <TextView
+                android:id="@+id/movieRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7.5"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginStart="5dp"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/genreChips"
+            android:layout_below="@id/releaseDate"
+            android:layout_toEndOf="@id/posterImg"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:chipSpacingHorizontal="4dp"
+            app:singleLine="true" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

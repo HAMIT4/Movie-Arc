@@ -98,7 +98,7 @@ public class PlayerActivity extends AppCompatActivity {
         errorText= findViewById(R.id.errorText);
         title= findViewById(R.id.toolbar_title);
 
-        btnBack.setOnClickListener(v->{finish();});
+        btnBack.setOnClickListener(v-> {finish();});
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -119,6 +119,9 @@ public class PlayerActivity extends AppCompatActivity {
         webSettings.setAllowContentAccess(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
+        //just a check to debug
+        WebView.setWebContentsDebuggingEnabled(true);
+
 
         // optimize performance
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
@@ -185,7 +188,7 @@ public class PlayerActivity extends AppCompatActivity {
 
                 if (!sourceFound) {
                     // Retry mechanism for failed resources
-                    checkPageSuccess(url);
+                    webView.postDelayed(() -> checkPageSuccess(url), 3000);
                 } else {
                     // Source already found, just remove timeout
                     webView.removeCallbacks(PlayerActivity.this::checkSourceTimeout);
