@@ -1,5 +1,6 @@
 package com.hamit.moviearc.Fragments.Watchlist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -123,7 +124,7 @@ public class GeneralFragment extends Fragment {
         emptyList.setVisibility(View.VISIBLE);
         generalRecycler.setVisibility(View.GONE);
 
-        // Set appropriate empty message based on category
+        // Set empty message based on category
         switch (category) {
             case "Watchlist":
                 emptyList.setText("Your watchlist is empty");
@@ -232,6 +233,7 @@ public class GeneralFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateUI() {
         if (movieList.isEmpty()) {
             showEmptyState();

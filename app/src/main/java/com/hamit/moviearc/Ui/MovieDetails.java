@@ -162,7 +162,7 @@ public class MovieDetails extends AppCompatActivity {
 
     public void setupWatchListButton() {
         btnWatchList.setOnClickListener(v->{
-            int movieId = movie != null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
+            int movieId = getCurrentMovieId();
             Movie currentMovie = getCurrentMovie();
 
             if (currentMovie == null || movieId == -1) {
@@ -229,6 +229,11 @@ public class MovieDetails extends AppCompatActivity {
         firestoreHelper.isMovieInWishlist(movieId, inWishlist -> {
             this.isInWishlist = inWishlist;
             updateWishlistButton();
+        });
+        // check if movie is in watchlist
+        firestoreHelper.isMovieInWatchlist(movieId, isInWatchList ->{
+            this.isInWatchList = isInWatchList;
+            updateWatchlistButton();
         });
 
     }
