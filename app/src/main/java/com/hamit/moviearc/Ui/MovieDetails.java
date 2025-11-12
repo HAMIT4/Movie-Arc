@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.hamit.moviearc.Adapters.PopularRecycler;
 import com.hamit.moviearc.HelperClasses.AppInstallerHelper;
 import com.hamit.moviearc.HelperClasses.FirestoreHelper;
+import com.hamit.moviearc.HelperClasses.MoviePlayerHelper;
 import com.hamit.moviearc.MainActivity;
 import com.hamit.moviearc.Network.Clients.RetrofitClient;
 import com.hamit.moviearc.Network.Data.Movie;
@@ -190,10 +192,48 @@ public class MovieDetails extends AppCompatActivity {
 
         // now, now we watch some movies
         watchBtn.setOnClickListener(v->{
-            //openMoviePlayer();
             // here we try to check if drama player exist and open else download drama player
-            appInstallerHelper.openOrInstallApp();
-            openMoviePlayer();
+            //appInstallerHelper.openOrInstallApp();
+            //openMoviePlayer();
+            //openMoviePlayerWithWebViewExtraction();
+            int movieId = getCurrentMovieId();
+
+            // Check if Drama Player is installed
+            if (!isAppInstalled("com.drama.simpleplayer")) {
+                // Drama Player not installed - offer options
+                new AlertDialog.Builder(MovieDetails.this)
+                        .setTitle("Choose How to Watch")
+                        .setMessage("Drama Player is not installed. How would you like to watch?")
+                        .setPositiveButton("Install Drama Player", (dialog, which) -> {
+                            appInstallerHelper.openOrInstallApp();
+                        })
+                        .setNegativeButton("Watch in Browser", (dialog, which) -> {
+                            // Open in browser
+                            String url = "https://vidsrc.xyz/embed/movie/" + movieId;
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                        })
+                        .setNeutralButton("Find Video Stream", (dialog, which) -> {
+                            // Use WebView to extract actual video URL
+                            openMoviePlayerWithWebViewExtraction();
+                        })
+                        .show();
+            } else {
+                // Drama Player IS installed
+                new AlertDialog.Builder(MovieDetails.this)
+                        .setTitle("Choose Playback Method")
+                        .setMessage("How would you like to play this movie?")
+                        .setPositiveButton("Quick Play (Embed)", (dialog, which) -> {
+                            // Send embed URL directly to Drama Player
+                            openMoviePlayer();
+                        })
+                        .setNegativeButton("Extract Stream URL", (dialog, which) -> {
+                            // Extract actual video stream URL first
+                            openMoviePlayerWithWebViewExtraction();
+                        })
+                        .setNeutralButton("Cancel", null)
+                        .show();
+            }
         });
 
         setupFavoriteButton();
@@ -204,8 +244,6 @@ public class MovieDetails extends AppCompatActivity {
         if (movie != null || resultItem != null) {
             checkInitialStates();
         }
-
-
 
 
     }
@@ -656,7 +694,7 @@ public class MovieDetails extends AppCompatActivity {
         });
     }
 
-    private void openMoviePlayer(){
+    private void openMoviePlayer_prev(){
         int movieId= movie !=null ? movie.getId() : (resultItem != null ? resultItem.getId() : -1);
 
         String movieTitle= movie !=null ? movie.getTitle() : (resultItem != null ? resultItem.getDisplayTitle() : "Movie");
@@ -672,6 +710,153 @@ public class MovieDetails extends AppCompatActivity {
         intent.putExtra("tmdbId", movieId);
         startActivity(intent);
     }
+
+    //this is a make or break code very long
+
+
+// Replace your openMoviePlayer() method with this improved version
+
+    // OPTION 1: Direct embed URL approach (Simple - Try this first!)
+    private void openMoviePlayer() {
+        int movieId = getCurrentMovieId();
+        String movieTitle = movie != null ? movie.getTitle() :
+                (resultItem != null ? resultItem.getDisplayTitle() : "Movie");
+
+        if (movieId == -1) {
+            Toast.makeText(this, "Movie not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create embed URLs
+        String[] embedUrls = {
+                "https://vidsrc.xyz/embed/movie/" + movieId,
+                "https://vidsrc.to/embed/movie/" + movieId,
+                "https://www.2embed.cc/embed/" + movieId
+        };
+
+        // Try to open with Drama Player
+        boolean opened = openDramaPlayerWithUrl(embedUrls[0]);
+
+        if (!opened) {
+            // Show options if Drama Player can't open it
+            showPlayerOptions(embedUrls);
+        }
+    }
+
+    private void openMoviePlayerWithWebViewExtraction() {
+        int movieId = getCurrentMovieId();
+        String movieTitle = movie != null ? movie.getTitle() :
+                (resultItem != null ? resultItem.getDisplayTitle() : "Movie");
+
+        if (movieId == -1) {
+            Toast.makeText(this, "Movie not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show loading dialog
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Finding video source...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
+        // Use MoviePlayerHelper with WebView to extract actual video URL
+        new MoviePlayerHelper(this, movieId, movieTitle, new MoviePlayerHelper.VideoLinkCallback() {
+            @Override
+            public void onVideoLinkFound(String videoUrl) {
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+
+                    // Try to open Drama Player with the found URL
+                    boolean success = openDramaPlayerWithUrl(videoUrl);
+
+                    if (!success) {
+                        showPlayerOptions(new String[]{videoUrl});
+                    }
+                });
+            }
+
+            @Override
+            public void onAllSourcesFailed() {
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(MovieDetails.this,
+                            "No video sources available. Try playing directly in app.",
+                            Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
+
+    private void showPlayerOptions(String[] urls) {
+        new AlertDialog.Builder(this)
+                .setTitle("Choose Action")
+                .setMessage("Drama Player is not installed or cannot open this video.")
+                .setPositiveButton("Install Drama Player", (dialog, which) -> {
+                    appInstallerHelper.openOrInstallApp();
+                })
+                .setNegativeButton("Use Browser", (dialog, which) -> {
+                    // Open in browser as fallback
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urls[0]));
+                    startActivity(browserIntent);
+                })
+                .setNeutralButton("Try Other Player", (dialog, which) -> {
+                    // Let user choose any video player
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.parse(urls[0]), "video/*");
+                    startActivity(Intent.createChooser(intent, "Play with"));
+                })
+                .show();
+    }
+
+    private boolean openDramaPlayerWithUrl(String videoUrl) {
+        String packageName = "com.drama.simpleplayer";
+
+        Log.d("MovieDetails", "Attempting to open: " + videoUrl);
+
+        // Method 1: Try with Drama Player directly
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(videoUrl), "video/*");
+        intent.setPackage(packageName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            startActivity(intent);
+            Log.d("MovieDetails", "✓ Drama Player launched successfully");
+            return true;
+        } catch (ActivityNotFoundException e) {
+            Log.d("MovieDetails", "✗ Drama Player not found");
+
+            // Method 2: Try generic video intent (will show chooser)
+            try {
+                Intent genericIntent = new Intent(Intent.ACTION_VIEW);
+                genericIntent.setDataAndType(Uri.parse(videoUrl), "video/*");
+                genericIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                if (genericIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(genericIntent, "Play with"));
+                    return true;
+                }
+            } catch (Exception ex) {
+                Log.e("MovieDetails", "✗ Error with generic intent: " + ex.getMessage());
+            }
+
+            return false;
+        }
+    }
+
+
+    // Helper method to check if app is installed
+    private boolean isAppInstalled(String packageName) {
+        try {
+            getPackageManager().getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    // make or break code ends here
+
 
     @Override
     protected void onDestroy() {
