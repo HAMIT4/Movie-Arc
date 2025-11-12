@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.hamit.moviearc.Adapters.PopularRecycler;
+import com.hamit.moviearc.HelperClasses.AppInstallerHelper;
 import com.hamit.moviearc.HelperClasses.FirestoreHelper;
 import com.hamit.moviearc.MainActivity;
 import com.hamit.moviearc.Network.Clients.RetrofitClient;
@@ -60,6 +63,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieDetails extends AppCompatActivity {
+
+    private AppInstallerHelper appInstallerHelper;
     private Movie movie;
     private ChipGroup genreChipGroup;
     private TmdbService mdbService;
@@ -156,12 +161,39 @@ public class MovieDetails extends AppCompatActivity {
             finish();
         });
 
+        //
+        appInstallerHelper = new AppInstallerHelper(
+                this,
+                "com.drama.simpleplayer",
+                "https://d-15.winudf.com/b/APK/Y29tLmRyYW1hLnNpbXBsZXBsYXllcl81XzVlMGFlZDE3?_fn=RHJhbWEgUGxheWVyXzEuMC41X0FQS1B1cmUuYXBr&_p=Y29tLmRyYW1hLnNpbXBsZXBsYXllcg%3D%3D&download_id=otr_1251407706762023&is_hot=true&k=89f4fc35a168eddc37c8f21f6bd29627691600ea",
+                "Drama Player"
+        );
+
+        appInstallerHelper.setCallback(new AppInstallerHelper.InstallCallback() {
+            @Override
+            public void onInstallSuccess() {
+                Toast.makeText(MovieDetails.this, "Drama Player installed successfully!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onInstallFailed(String error) {
+                Toast.makeText(MovieDetails.this, "Failed to install: " + error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAppOpened() {
+                Toast.makeText(MovieDetails.this, "Opening Drama Player...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //
+
         // now, now we watch some movies
         watchBtn.setOnClickListener(v->{
-            // openMoviePlayer();
-            // here we try to download drama player
-            openSimplePlayer();
-
+            //openMoviePlayer();
+            // here we try to check if drama player exist and open else download drama player
+            appInstallerHelper.openOrInstallApp();
+            openMoviePlayer();
         });
 
         setupFavoriteButton();
@@ -173,7 +205,29 @@ public class MovieDetails extends AppCompatActivity {
             checkInitialStates();
         }
 
+
+
+
     }
+
+    private void findAllPackages() {
+        Log.d("PACKAGE_DEBUG", "=== LISTING ALL INSTALLED PACKAGES ===");
+
+        List<android.content.pm.PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+
+        for (android.content.pm.PackageInfo pkg : packages) {
+            String packageName = pkg.packageName;
+
+            // Check if this package has a launch intent (means it's an app you can open)
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+            if (launchIntent != null) {
+                Log.d("PACKAGE_DEBUG", "LAUNCHABLE APP: " + packageName);
+            }
+        }
+
+        Log.d("PACKAGE_DEBUG", "=== ALL PACKAGES LISTED ===");
+    }
+
 
     public void setupWatchListButton() {
         btnWatchList.setOnClickListener(v->{
@@ -646,6 +700,15 @@ public class MovieDetails extends AppCompatActivity {
             // Convert ResultItem to Movie object
             return convertResultItemToMovie(resultItem);
         }
+
+        // to prevent memory leaks
+        if (appInstallerHelper != null) {
+            appInstallerHelper.cleanup();
+        }
+        if (youTubePlayerView != null) {
+            youTubePlayerView.release();
+        }
+
         return null;
     }
     // Convert ResultItem to Movie object for Firestore
@@ -670,236 +733,16 @@ public class MovieDetails extends AppCompatActivity {
         return movie;
     }
 
+    // handlers for permission
 
-
-
-
-
-
-
-
-    // this code might make or break
-
-    private void openSimplePlayer() {
-        String packageName = "com.drama.simpleplayer";
-        String downloadUrl = "https://dw.uptodown.net/dwn/UtcNUeFrmEi9M75Qcyo9gCVS_dFqnp7YmttCcolfzCMu7QNGY-QNAbIXwNzuhCN2APMuY6HnfYqxxNHI95pJO-rtsCVbZeaC2gejPTzBYSDQ-AhKfsI-LOquekkyRPmp/3wsjtC8vl5n_Ka7ZSSDcJVfC7Iv2elNKiNxMR3bAHXiQ6fm1ghDGyP2YdErX8RnG-6IdBIHSYm-nyaZUH04XwSGdTc58khBpPD9O8mXFkrju4CrVMgMlLZ55-oimbVfA/8SNupDZxPjVPmMBTKeb_HnT8T43YByHrW22V6V65xmljhTo2ZQErhvbfTcD2NUHDHosPqJqisCOcse2-gjenTw==/drama-player-1-0-5.apk";
-
-        if (isAppInstalled(packageName)) {
-            // App is installed, open it
-            openApp(packageName);
-        } else {
-            // App not installed, download and install
-            downloadAndInstallDramaPlayer(downloadUrl);
-        }
-    }
-
-    // Check if app is installed
-    private boolean isAppInstalled(String packageName) {
-        try {
-            getPackageManager().getPackageInfo(packageName, 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-    // Open the app if installed
-    private void openApp(String packageName) {
-        try {
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
-            if (launchIntent != null) {
-                startActivity(launchIntent);
-            } else {
-                Toast.makeText(this, "Could not open Drama Player", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Error opening Drama Player", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
-
-    // Download and install Drama Player
-    private void downloadAndInstallDramaPlayer(String downloadUrl) {
-        // Check for install permission (Android 8.0+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!getPackageManager().canRequestPackageInstalls()) {
-                // Request install permission
-                requestInstallPermission();
-                return;
-            }
-        }
-
-        // Show confirmation dialog
-        showDownloadConfirmationDialog(downloadUrl);
-    }
-
-    // Show download confirmation dialog
-    private void showDownloadConfirmationDialog(String downloadUrl) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Install Drama Player");
-        builder.setMessage("Drama Player is required to watch movies. Do you want to download and install it now?");
-
-        builder.setPositiveButton("Download", (dialog, which) -> {
-            startDownload(downloadUrl);
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
-            dialog.dismiss();
-        });
-
-        builder.show();
-    }
-
-    // Start the download process
-    private void startDownload(String downloadUrl) {
-        // Show progress dialog
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Downloading Drama Player");
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-        progressDialog.setMax(100);
-        progressDialog.show();
-
-        // Use DownloadManager for reliable download
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-        // Create download request
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
-
-        // Set download details
-        request.setTitle("Drama Player");
-        request.setDescription("Downloading Drama Player app");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        // Set destination
-        String fileName = "DramaPlayer-" + System.currentTimeMillis() + ".apk";
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-
-        // Enqueue download
-        long downloadId = downloadManager.enqueue(request);
-
-        // Monitor download progress
-        monitorDownloadProgress(downloadId, downloadManager, progressDialog);
-    }
-
-    // Monitor download progress
-    private void monitorDownloadProgress(long downloadId, DownloadManager downloadManager, ProgressDialog progressDialog) {
-        new Thread(() -> {
-            boolean downloading = true;
-
-            while (downloading) {
-                DownloadManager.Query query = new DownloadManager.Query();
-                query.setFilterById(downloadId);
-
-                try (Cursor cursor = downloadManager.query(query)) {
-                    if (cursor.moveToFirst()) {
-                        @SuppressLint("Range") int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
-
-                        switch (status) {
-                            case DownloadManager.STATUS_SUCCESSFUL:
-                                downloading = false;
-                                runOnUiThread(() -> {
-                                    progressDialog.dismiss();
-                                    installDownloadedApk(downloadId);
-                                });
-                                break;
-
-                            case DownloadManager.STATUS_FAILED:
-                                downloading = false;
-                                runOnUiThread(() -> {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Download failed", Toast.LENGTH_SHORT).show();
-                                });
-                                break;
-
-                            case DownloadManager.STATUS_RUNNING:
-                                // Update progress
-                                @SuppressLint("Range") long bytesDownloaded = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-                                @SuppressLint("Range") long bytesTotal = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-
-                                if (bytesTotal > 0) {
-                                    int progress = (int) ((bytesDownloaded * 100L) / bytesTotal);
-                                    runOnUiThread(() -> progressDialog.setProgress(progress));
-                                }
-                                break;
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    // Install the downloaded APK
-    private void installDownloadedApk(long downloadId) {
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri apkUri = downloadManager.getUriForDownloadedFile(downloadId);
-
-        if (apkUri != null) {
-            Intent installIntent = new Intent(Intent.ACTION_VIEW);
-            installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-            installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            try {
-                startActivity(installIntent);
-            } catch (Exception e) {
-                Toast.makeText(this, "Error installing app. Please enable 'Install from unknown sources'.", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this, "Downloaded file not found", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Request install permission for Android 8.0+
-    private void requestInstallPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Install Permission Required");
-            builder.setMessage("This app needs permission to install other apps. Please grant the permission to continue.");
-
-            builder.setPositiveButton("Grant Permission", (dialog, which) -> {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                intent.setData(Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, INSTALL_PERMISSION_REQUEST_CODE);
-            });
-
-            builder.setNegativeButton("Cancel", (dialog, which) -> {
-                dialog.dismiss();
-            });
-
-            builder.show();
-        }
-    }
-
-    // Handle permission result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == INSTALL_PERMISSION_REQUEST_CODE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (getPackageManager().canRequestPackageInstalls()) {
-                    // Permission granted, restart download process
-                    String downloadUrl = "https://dw.uptodown.net/dwn/UtcNUeFrmEi9M75Qcyo9gCVS_dFqnp7YmttCcolfzCMu7QNGY-QNAbIXwNzuhCN2APMuY6HnfYqxxNHI95pJO-rtsCVbZeaC2gejPTzBYSDQ-AhKfsI-LOquekkyRPmp/3wsjtC8vl5n_Ka7ZSSDcJVfC7Iv2elNKiNxMR3bAHXiQ6fm1ghDGyP2YdErX8RnG-6IdBIHSYm-nyaZUH04XwSGdTc58khBpPD9O8mXFkrju4CrVMgMlLZ55-oimbVfA/8SNupDZxPjVPmMBTKeb_HnT8T43YByHrW22V6V65xmljhTo2ZQErhvbfTcD2NUHDHosPqJqisCOcse2-gjenTw==/drama-player-1-0-5.apk";
-                    showDownloadConfirmationDialog(downloadUrl);
-                } else {
-                    Toast.makeText(this, "Permission denied. Cannot install Drama Player.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        // Let the AppInstallerHelper handle the install permission result
+        if (appInstallerHelper != null) {
+            appInstallerHelper.handleActivityResult(requestCode, resultCode, data);
         }
     }
-
-    // Define the permission request code
-    private static final int INSTALL_PERMISSION_REQUEST_CODE = 1001;
 
 }
